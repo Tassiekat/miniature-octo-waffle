@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://jtfyxatrrjbrnaajhupm.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "telecash-mcp",
+      "version": "0.1.0",
+      "title": "TeleCash"
+    },
+    "tools": [
+      {
+        "name": "get_bot_info",
+        "title": "Get bot info",
+        "description": "Fetch the connected Telegram bot's identity (username, display name, id) via getMe.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_webhook_status",
+        "title": "Get webhook status",
+        "description": "Return the Telegram webhook URL, pending update count, last error, and allowed update types.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_dashboard_stats",
+        "title": "Get dashboard stats",
+        "description": "Return TeleCash dashboard totals: total earnings (30d), active members by tier, MRR, and pending payouts.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_members",
+        "title": "List members",
+        "description": "List TeleCash members with tier, join date, referrer, and status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "tier": {
+              "description": "Filter by membership tier.",
+              "type": "string",
+              "enum": [
+                "Basic",
+                "Pro",
+                "VIP"
+              ]
+            },
+            "status": {
+              "description": "Filter by member status.",
+              "type": "string",
+              "enum": [
+                "Active",
+                "Past due",
+                "Cancelled"
+              ]
+            },
+            "limit": {
+              "description": "Max rows to return.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_payouts",
+        "title": "Get payouts",
+        "description": "Return TeleCash payout data: the pending payout balance, next payout date, and recent payout history (gross, referral commission, fees, net) so earnings-withdrawal questions can be answered.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Filter payout history by status.",
+              "type": "string",
+              "enum": [
+                "pending",
+                "processing",
+                "paid"
+              ]
+            },
+            "limit": {
+              "description": "Max payout records to return (default 6).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 24
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "send_telegram_message",
+        "title": "Send Telegram message",
+        "description": "Send a text message from the TeleCash bot to a specific Telegram chat_id via sendMessage.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "chat_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "description": "Telegram chat_id or @channel_username to send to."
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096,
+              "description": "Message text (max 4096 chars)."
+            },
+            "parse_mode": {
+              "description": "Optional Telegram parse mode.",
+              "type": "string",
+              "enum": [
+                "Markdown",
+                "MarkdownV2",
+                "HTML"
+              ]
+            }
+          },
+          "required": [
+            "chat_id",
+            "text"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

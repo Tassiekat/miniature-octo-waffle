@@ -1,0 +1,6 @@
+{
+  "framework": "tanstack-start",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/__server" }
+  ]
+}
